@@ -1,0 +1,71 @@
+title: Git Commit
+summary: Commits the given file
+description:
+website:
+source_code_url:
+support_url:
+host_os_tags:
+  - osx-10.11.5
+project_type_tags: []
+type_tags:
+  - git
+is_requires_admin_user: false
+is_always_run: false
+is_skippable: false
+deps:
+  brew:
+  - name: git
+  apt_get:
+  - name: git
+run_if: true
+inputs:
+  - file_to_commit:
+    opts:
+      title: "File to commit"
+      summary: "File to commit"
+      description: |
+        Path to file to commit.
+      is_expand: true
+      is_required: true
+  - commit_message:
+    opts:
+      title: "Commit message"
+      summary: "Commit message"
+      description: "Commit message"
+      is_expand: true
+      is_required: true
+  - is_dry_run: false
+    opts:
+      title: "Dry Run"
+      summary: "Set to true for --dry-run commit."
+      description: "Set to true for --dry-run commit."
+      is_expand: true
+      is_required: false
+      value_options: ["true", "false"]
+  - force_push: false
+    opts:
+      title: "Force push after commit"
+      summary: "Set to true if 'git push -f' should be performed after succesful 'git commit'."
+      description: |
+        Set to true if 'git push -f' should be performed after succesful 'git commit'.
+        is_dry_run applies to the git push command.
+      is_expand: true
+      is_required: false
+      value_options: ["true", "false"]
+  - force_push_branch: $BITRISE_GIT_BRANCH
+    opts:
+      title: "Branch to force push to."
+      summary: "Branch to force push to. Defaults to $BITRISE_GIT_BRANCH"
+      description: "Branch to force push to. Defaults to $BITRISE_GIT_BRANCH"
+      is_expand: true
+      is_required: false
+
+#outputs:
+#  - EXAMPLE_STEP_OUTPUT:
+#    opts:
+#      title: "Example Step Output"
+#      summary: Summary. No more than 2-3 sentences.
+#      description: |
+#        Description of this output.
+#
+#        Can be Markdown formatted text.
