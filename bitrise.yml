@@ -3,23 +3,40 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 
 app:
   envs:
-  # define these in your .bitrise.secrets.yml
-  - A_SECRET_PARAM: $A_SECRET_PARAM
-
+  - FILE_TO_COMMIT: testdata/fileout.txt
+  - COMMIT_MESSAGE: test commit message.
+  - IS_DRY_RUN: true
+  - FORCE_PUSH: false
+  - FORCE_PUSH_BRANCH:  
 workflows:
+  audit:
+    steps:
+    - script:
+        title: Step audit (validate step.yml)
+        inputs:
+        - content: stepman audit --step-yml=./step.yml
   test:
     steps:
-    - change-workdir:
-        title: Switch working dir to test / _tmp dir
-        description: |-
-          To prevent step testing issues, like referencing relative
-          files with just './some-file' in the step's code, which would
-          work for testing the step from this directory directly
-          but would break if the step is included in another `bitrise.yml`.
-        run_if: true
+#    - change-workdir:
+#        title: Switch working dir to test / _tmp dir
+#        description: |-
+#          To prevent step testing issues, like referencing relative
+#          files with just './some-file' in the step's code, which would
+#          work for testing the step from this directory directly
+#          but would break if the step is included in another `bitrise.yml`.
+#        run_if: true
+#        inputs:
+#        - path: ./_tmp
+#        - is_create_path: true
+    - script:
+        title: Modify test data
         inputs:
-        - path: ./_tmp
-        - is_create_path: true
+        - content: |-
+            #!/bin/bash
+            echo "modified this file" >> ${FILE_TO_COMMIT}
+            git status .
+        opts:
+          is_expand: true
     - path::./:
         title: Step Test
         description: |-
@@ -27,11 +44,19 @@ workflows:
           you can overwrite it if you want to, just like we did below,
           but the step would use the default value specified in the `step.yml`
           file if you would not specify another value.
-        run_if: true
         inputs:
-        - example_step_input: Example Step Input's value
-
-
+        - file_to_commit: $FILE_TO_COMMIT
+        - commit_message: $COMMIT_MESSAGE
+        - is_dry_run: true
+    - script:
+        title: Reset modified test data
+        inputs:
+        - content: |-
+            #!/bin/bash
+            git checkout -- ${FILE_TO_COMMIT}
+            git status .
+        opts:
+          is_expand: true
   # ----------------------------------------------------------------
   # --- workflows to Share this step into a Step Library
   share-this-step:

@@ -1,11 +1,12 @@
 title: Git Commit
 summary: Commits the given file
-description:
-website:
-source_code_url:
-support_url:
+description: Commits the given file
+website: https://github.com/squaretrade/bitrise-step-git-commit
+source_code_url: https://github.com/squaretrade/bitrise-step-git-commit
+support_url: https://github.com/squaretrade/bitrise-step-git-commit/issues
 host_os_tags:
   - osx-10.11.5
+  - ubuntu
 project_type_tags: []
 type_tags:
   - git

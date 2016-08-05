@@ -11,7 +11,7 @@
 * `force_push_branch`: Branch to force push to. Defaults to `$BITRISE_GIT_BRANCH`
 
 ## TODO
-* fix bitrise.yml for testing and sharing.
+* fix bitrise.yml for sharing.
 * Support passing in multiple files to commit
 
 ## Credits
