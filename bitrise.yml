@@ -3,7 +3,7 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 
 app:
   envs:
-  - FILE_TO_COMMIT: testdata/fileout.txt
+  - FILES_TO_COMMIT: testdata/fileout.txt testdata/fileout2.txt
   - COMMIT_MESSAGE: test commit message.
   - IS_DRY_RUN: true
   - FORCE_PUSH: false
@@ -33,11 +33,18 @@ workflows:
         inputs:
         - content: |-
             #!/bin/bash
-            echo "modified this file" >> ${FILE_TO_COMMIT}
+            set -x
+            set -e
+            for file in $FILES_TO_COMMIT
+            do
+              echo "modified this file" >> ${file}
+            done  
             git status .
         opts:
           is_expand: true
+        is_always_run: false
     - path::./:
+        run_if: true
         title: Step Test
         description: |-
           The example input has a default value,
@@ -45,18 +52,26 @@ workflows:
           but the step would use the default value specified in the `step.yml`
           file if you would not specify another value.
         inputs:
-        - file_to_commit: $FILE_TO_COMMIT
+        - files_to_commit: $FILES_TO_COMMIT
         - commit_message: $COMMIT_MESSAGE
         - is_dry_run: true
+        is_always_run: false
     - script:
+        run_if: true
         title: Reset modified test data
         inputs:
         - content: |-
             #!/bin/bash
-            git checkout -- ${FILE_TO_COMMIT}
+            set -x
+            set -e
+            for file in $FILES_TO_COMMIT
+            do
+              git checkout -- "${file}"
+            done
             git status .
         opts:
           is_expand: true
+        is_always_run: false  
   # ----------------------------------------------------------------
   # --- workflows to Share this step into a Step Library
   share-this-step:

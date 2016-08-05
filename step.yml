@@ -1,6 +1,6 @@
 title: Git Commit
-summary: Commits the given file
-description: Commits the given file
+summary: Git commits a given set of files
+description: Git commits a given set of files
 website: https://github.com/squaretrade/bitrise-step-git-commit
 source_code_url: https://github.com/squaretrade/bitrise-step-git-commit
 support_url: https://github.com/squaretrade/bitrise-step-git-commit/issues
@@ -20,12 +20,12 @@ deps:
   - name: git
 run_if: true
 inputs:
-  - file_to_commit:
+  - files_to_commit:
     opts:
-      title: "File to commit"
-      summary: "File to commit"
+      title: "File(s) to commit"
+      summary: "A list of file(s) to commit"
       description: |
-        Path to file to commit.
+        A list of file(s) to commit.
       is_expand: true
       is_required: true
   - commit_message:

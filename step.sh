@@ -4,19 +4,24 @@
 set -e
 
 # --- Debug
-#file_to_commit='ppa/version.gradle'
-#commit_message='incremented version'
+#files_to_commit="testdata/fileout.txt testdata/fileout2.txt"
+#commit_message='added some data'
+#is_dry_run=true
+#set -x
 
 # --- Required parameters
-if [ -z "${file_to_commit}" ] ; then
-  echo " [!] Missing required input: file_to_commit"
+if [ -z "${files_to_commit}" ] ; then
+  echo " [!] Missing required input: files_to_commit"
   exit 1
 fi
 
-if [ ! -f "${file_to_commit}" ] ; then
-  echo " [!] File doesn't exist: ${file_to_commit}"
-  exit 1
-fi
+for file in $files_to_commit
+do
+  if [ ! -f "${file}" ] ; then
+    echo " [!] File doesn't exist: ${file}"
+    exit 1
+  fi
+done
 
 if [ -z "${commit_message}" ] ; then
   echo " [!] Missing required input: commit_message"
@@ -24,8 +29,8 @@ if [ -z "${commit_message}" ] ; then
 fi
 
 # --- Display required parameters
-echo "File to commit: ${file_to_commit}"
-echo "Commit message: ${commit_message}"
+echo " (i) File(s) to commit: ${files_to_commit}"
+echo " (i) Commit message: ${commit_message}"
 
 # --- dry-run optional parameter
 if [[ -n "${is_dry_run}" && "${is_dry_run}" == "true" ]] ; then
@@ -33,7 +38,7 @@ if [[ -n "${is_dry_run}" && "${is_dry_run}" == "true" ]] ; then
 fi
 
 # --- execute git commit
-git_commit_cmd="git commit ${dry_run}-m \"${commit_message}\" ${file_to_commit}"
+git_commit_cmd="git commit ${dry_run}-m \"${commit_message}\" ${files_to_commit}"
 echo " (i) Executing: '${git_commit_cmd}'"
 eval "${git_commit_cmd}"
 
