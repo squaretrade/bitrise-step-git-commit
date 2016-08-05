@@ -1,4 +1,4 @@
-# Git commits (and optionally pushes) a single file
+# Bitrise build step: git commit
 
 ### Build Step Parameters
 #### Required
